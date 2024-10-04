@@ -1,23 +1,44 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import StudentTable from './components/StudentTable';
+import NewStudentForm from './components/NewStudentForm'
 
 function App() {
+  const [students, setStudents] = useState(
+    [
+      {mssv: "1",dem: "vu",ten: "minh"},
+      {mssv: "2",dem: "bao",ten: "vu"},
+      {mssv: "3",dem: "minh",ten: "bao"},
+      {mssv: "4",dem: "vu",ten: "minh"},
+      {mssv: "5",dem: "bao",ten: "vu"}
+    ]
+  );
+
+  const [showForm, setShowForm] = useState(false);
+
+  const deleteStudent = (studentId) =>{
+    const updateStudent = students.filter(student=>student.mssv!==studentId);
+    setStudents(updateStudent);
+  };
+
+
+  const addStudent = (lastName, firstName)=>{
+    const student = {
+      mssv: students.length+1,
+      dem: lastName,
+      ten: firstName
+    }
+    setStudents([...students, student])
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+        <StudentTable students = {students} deleteStudent = {deleteStudent}/>
+        <button className='btn btn-primary'
+          onClick={()=>{setShowForm(!showForm)}}
         >
-          Learn React
-        </a>
-      </header>
+          {showForm?'close':'open'}
+        </button>
+        {showForm && <NewStudentForm add = {addStudent}/>}
     </div>
   );
 }
